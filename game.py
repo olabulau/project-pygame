@@ -1,7 +1,3 @@
-# Pygame remake of my old Minesweeper clone
-# Same assets and mostly the same logic
-# (c) Marley Sudbury 2019
-
 import pygame
 import random
 import time
@@ -64,8 +60,6 @@ class Game:
         self.lost = False
 
         self.load_fonts()
-        """self.sounds["music"].play(-1)"""
-        """self.sounds["explosion1"].play()"""
 
         self.load_leaderboard()
 
@@ -111,10 +105,6 @@ class Game:
                         self.background = self.images["ИГРАТЬ"]
                     elif 190 <= pos[1] < 230:
                         self.background = self.images["ПРАВИЛА"]
-                    """elif 230 <= pos[1] < 275:
-                        self.background = self.images["OPTIONS"]
-                    elif 275 <= pos[1]:
-                        self.background = self.images["LEADERBOARD"]"""
                 else:
                     self.background = self.images["ИГРАТЬ"]
             elif self.game_state == "ИГРАТЬ":
@@ -124,10 +114,6 @@ class Game:
                     self.background = self.images["GAME_2"]
                 elif 230 <= pos[1] < 274:
                     self.background = self.images["GAME_3"]
-                """elif 274 <= pos[1] < 316:
-                    self.background = self.images["GAME_4"]
-                else:
-                    self.background = self.images["GAME_5"]"""
             elif self.game_state == "PLAYING":
                 current_time = time.time()
                 if current_time - self.start_time >= 1 and self.timer:
@@ -139,16 +125,6 @@ class Game:
                 if not self.display_done:
                     if 450 < pos[1]:
                         self.background = self.images["RETURN_TO_MENU"]
-            """elif self.game_state == "OPTIONS":
-                if not self.display_done:
-                    if pos[1] < 210:
-                        self.background = self.images["RESET_LEADERBOARD"]
-                    elif 210 <= pos[1] < 300:
-                        self.background = self.images["MUTE_SOUND"]
-                    else:
-                        self.background = self.images["RETURN_TO_MENU"]
-            elif self.game_state == "LEADERBOARD":
-                self.background = self.images["GAME_BG"]"""
 
             if self.return_value:
                 self.update_leaderboard()
@@ -162,15 +138,6 @@ class Game:
                     self.game_display.blit(self.images["LOSE"], (0, 0))
                 elif self.won:
                     self.game_display.blit(self.images["WIN"], (0, 0))
-            """elif self.game_state == "LEADERBOARD":
-                self.display_leaderboard()
-            if self.game_state == "OPTIONS":
-                if self.mute:
-                    self.game_display.blit(self.images["MUTED"], (0, 0))
-                else:
-                    self.game_display.blit(self.images["UNMUTED"], (0, 0))
-                if self.display_done:
-                    self.game_display.blit(self.images["DONE_OVERLAY"], (0, 0))"""
 
             if self.box != None:
                 self.box.draw(self)
@@ -192,22 +159,10 @@ class Game:
         self.game_state = "PLAYING"
         self.start_game()
 
-    """def goto_options(self):
-        if not self.loaded["options"]:
-            self.load_data_options()
-        self.game_state = "OPTIONS"
-        self.sounds["vn"].play()"""
-
     def goto_story(self):
         if not self.loaded["правила"]:
             self.load_data_story()
         self.game_state = "ПРАВИЛА"
-
-    """def goto_leaderboard(self):
-        # The only data needed is the game background
-        if not self.loaded["game"]:
-            self.load_data_game()
-        self.game_state = "LEADERBOARD"""
 
     def update_leaderboard(self):
         self.return_value = False
@@ -227,10 +182,6 @@ class Game:
                 self.leaderboard[2][1] = "{:0>3}".format(self.time.get_val())
 
         self.box = None
-
-        """self.sounds["winMusic"].stop()
-        self.sounds["gameOver"].stop()
-        self.sounds["music"].play(-1)"""
 
         self.timer = False
         self.lost = False
@@ -277,7 +228,7 @@ class Game:
         self.game_display.blit(easy, (50, 90))
         self.game_display.blit(medium, (50, 120))
         self.game_display.blit(hard, (50, 150))
-        '''self.game_display.blit(concentric, (50, 180))'''
+
 
     def get_name(self):
         self.box = TextBox(self.W_WIDTH/2-65/2, self.W_HEIGHT/2-45/2, 65, 45)
@@ -295,22 +246,14 @@ class Game:
         if self.game_mode == "HARD":
             if self.time.get_val() < int(self.leaderboard[2][1]):
                 self.get_name()
-        '''if self.game_mode == "CONCENTRIC":
-            print("hmm")'''
+
 
         for row in self.tiles:
             for tile in row:
                 if tile.covered and not tile.mine:
                     tile.covered = False
-        """self.sounds["music"].stop()
-        self.sounds["winMusic"].play(-1)"""
+
         saying = random.randint(0, 3)
-        """if saying == 0:
-            self.sounds["finesweeping"].play()
-        elif saying == 1:
-            self.sounds["goodjob"].play()
-        else:
-            self.sounds["youdidit"].play()"""
 
     def lose(self):
         self.lost = True
@@ -319,15 +262,9 @@ class Game:
             for tile in row:
                 if tile.mine and tile.covered:
                     tile.covered = False
-        """self.sounds["music"].stop()
-        self.sounds["gameOver"].play(-1)
-        self.sounds["explosion1"].play()
-        self.sounds["scream"].play()"""
+
         saying = random.randint(0, 2)
-        """if saying == 0:
-            self.sounds["grr"].play()
-        else:
-            self.sounds["merloc"].play()"""
+
 
     def clearing(self, t):
         (i, j) = t
@@ -401,10 +338,6 @@ class Game:
             self.rows = 20
             self.cols = 27
             self.mines = 101
-        """elif self.game_mode == "CUSTOM":
-            self.rows = 24
-            self.cols = 32
-            self.mines = 256"""
 
         self.mine_left.set_val(self.mines)
 
@@ -450,8 +383,7 @@ class Game:
                     else:
                         self.tiles_cleared = 0
                         self.clearing(tuple_cov)
-                        """if self.tiles_cleared > 10:
-                            self.sounds["juicy"].play()"""
+
             else:
                 # Toggle flag (unless it is already uncovered)
                 if the_tile.covered:
@@ -545,23 +477,14 @@ class Game:
             if event.type == pygame.QUIT:
                 self.stop = True
             if event.type == pygame.MOUSEBUTTONDOWN:
-                # Play relevant sound effect
-                """if event.button == 1:
-                    self.sounds["click"].play()
-                else:
-                    self.sounds["rClick"].play()"""
 
-                # The bastard's done a click
                 if self.game_state == "MENU":
                     # The user has clicked in the menu!
                     if self.background == self.images["ИГРАТЬ"]:
                         self.goto_gamemode()
                     elif self.background == self.images["ПРАВИЛА"]:
                         self.goto_story()
-                    """elif self.background == self.images["OPTIONS"]:
-                        self.goto_options()
-                    else:
-                        self.goto_leaderboard()"""
+
                 elif self.game_state == "ИГРАТЬ":
                     if self.background == self.images["GAME_1"]:
                         self.game_mode = "EASY"
@@ -569,32 +492,11 @@ class Game:
                         self.game_mode = "MEDIUM"
                     elif self.background == self.images["GAME_3"]:
                         self.game_mode = "HARD"
-                    """else:
-                        self.game_mode = "CUSTOM"""
 
                     self.goto_game()
                 elif self.game_state == "PLAYING" and not self.won and not self.lost:
                     self.click_grid(event.button)
-                """elif self.game_state == "OPTIONS":
-                    if self.display_done:
-                        self.display_done = False
-                    elif self.background == self.images["RESET_LEADERBOARD"]:
-                        self.reset_leaderboard()
-                        self.display_done = True
-                    elif self.background == self.images["MUTE_SOUND"]:
-                        # pygame.mixer.stop()
-                        if pygame.mixer.get_num_channels() > 0:
-                            pygame.mixer.set_num_channels(0)
-                            self.mute = True
-                        else:
-                            pygame.mixer.set_num_channels(8)
-                            self.sounds["music"].play(-1)
-                            self.mute = False
 
-                        print("Shhh")
-                        self.display_done = True
-                    elif self.background == self.images["RETURN_TO_MENU"]:
-                        self.goto_menu()"""
             if event.type == pygame.KEYDOWN:
                 if self.box != None:
                     if event.key == pygame.K_ESCAPE:
@@ -615,10 +517,6 @@ class Game:
                     if self.game_state == "MENU":
                         self.stop = True
                     elif self.game_state == "PLAYING":
-                        """if self.won or self.lost:
-                            self.sounds["winMusic"].stop()
-                            self.sounds["gameOver"].stop()
-                            self.sounds["music"].play(-1)"""
 
                         self.timer = False
                         self.lost = False
@@ -628,12 +526,7 @@ class Game:
                     else:
                         self.goto_menu()
                 elif event.key == pygame.K_r and self.game_state == "PLAYING":
-                    """if self.won or self.lost:
-                        self.sounds["winMusic"].stop()
-                        self.sounds["gameOver"].stop()
-                        self.sounds["music"].play(-1)
 
-                    self.sounds["scream"].play()"""
                     self.timer = False
                     self.lost = False
                     self.won = False
@@ -646,37 +539,6 @@ class Game:
             str(self.image_path / "play1.png")).convert_alpha()
         self.images["ПРАВИЛА"] = pygame.image.load(
             str(self.image_path / "rule.png")).convert_alpha()
-        """self.images["OPTIONS"] = pygame.image.load(
-            str(self.image_path / "options.png")).convert_alpha()
-        self.images["LEADERBOARD"] = pygame.image.load(
-            str(self.image_path / "leaderboard.png")).convert_alpha()"""
-
-        """Loads all sounds for the game."""
-
-        # Music
-        """self.sounds["music"] = pygame.mixer.Sound(
-            str(self.sound_path / "music.ogg"))
-        self.sounds["music"].set_volume(0.2)"""
-
-        # Utterances of K_ESCAPE
-        # "Think of the children"
-        """self.sounds["thechildren"] = pygame.mixer.Sound(
-            str(self.sound_path / "voice" / "thechildren.ogg"))
-        # "Get back to work"
-        self.sounds["work"] = pygame.mixer.Sound(
-            str(self.sound_path / "voice" / "work.ogg"))
-
-        # Left click "Ugh"
-        self.sounds["click"] = pygame.mixer.Sound(
-            str(self.sound_path / "click.ogg"))
-        # Right click "Brrrrring"
-        self.sounds["rClick"] = pygame.mixer.Sound(
-            str(self.sound_path / "flag.ogg"))"""
-
-        # Boom!
-        """self.sounds["explosion1"] = pygame.mixer.Sound(
-            str(self.sound_path / "explosion-01.ogg"))
-        self.sounds["explosion1"].set_volume(0.2)"""
 
     def load_data_gamemode(self):
         # Game type selection
@@ -736,7 +598,6 @@ class Game:
         self.images["MINE"] = pygame.image.load(
             str(self.image_path / "tiles" / "MINtile.png")).convert_alpha()
         self.images["MINE"] = pygame.transform.scale(
-
             self.images["MINE"], (self.TILE_SIZE, self.TILE_SIZE))
         self.images["EXPLODED"] = pygame.image.load(
             str(self.image_path / "tiles" / "EXPtile.png")).convert_alpha()
@@ -783,46 +644,9 @@ class Game:
         self.images["LOSE"] = pygame.image.load(
             str(self.image_path / "lost.png")).convert_alpha()
 
-        """self.sounds["winMusic"] = pygame.mixer.Sound(
-            str(self.sound_path / "success.ogg"))
-        self.sounds["winMusic"].set_volume(0.2)
-        self.sounds["gameOver"] = pygame.mixer.Sound(
-            str(self.sound_path / "gameover.ogg"))
-
-        self.sounds["juicy"] = pygame.mixer.Sound(
-            str(self.sound_path / "voice" / "juice.ogg"))
-
-        # Winning remarks
-        # "That's some mighty fine minesweeping"
-        self.sounds["finesweeping"] = pygame.mixer.Sound(
-            str(self.sound_path / "voice" / "finesweeping.ogg"))
-        # "Good job corpral"
-        self.sounds["goodjob"] = pygame.mixer.Sound(
-            str(self.sound_path / "voice" / "goodjob.ogg"))
-        # "You did it"
-        self.sounds["youdidit"] = pygame.mixer.Sound(
-            str(self.sound_path / "voice" / "youdidit.ogg"))
-
-        # Losing remarks
-        # "Grrrrr"
-        self.sounds["grr"] = pygame.mixer.Sound(
-            str(self.sound_path / "voice" / "grr.ogg"))
-        # "Kraklglslask"
-        self.sounds["merloc"] = pygame.mixer.Sound(
-            str(self.sound_path / "voice" / "merloc.ogg"))
-
-        # Restart or game over "Aghhh"
-        self.sounds["scream"] = pygame.mixer.Sound(
-            str(self.sound_path / "scream.ogg"))"""
-
         self.loaded["game"] = True
 
     def load_data_options(self):
-        # Options options
-        '''self.images["RESET_LEADERBOARD"] = pygame.image.load(
-            str(self.image_path / "options1.png")).convert_alpha()
-        self.images["MUTE_SOUND"] = pygame.image.load(
-            str(self.image_path / "options2.png")).convert_alpha()'''
         self.images["RETURN_TO_MENU"] = pygame.image.load(
             str(self.image_path / "rules.png")).convert_alpha()
         self.images["DONE_OVERLAY"] = pygame.image.load(
@@ -832,17 +656,7 @@ class Game:
         self.images["UNMUTED"] = pygame.image.load(
             str(self.image_path / "unmuted.png")).convert_alpha()
 
-        # "Vape Naysh y'all", options screen
-        """self.sounds["vn"] = pygame.mixer.Sound(
-            str(self.sound_path / "voice" / "vn.ogg"))"""
-
         self.loaded["options"] = True
-
-    # def load_data_leaderboard(self):
-    #     # Leaderboard
-    #     self.images["LEADERBOARD_SCREEN"] = pygame.image.load(
-    #         str(self.image_path / "blank.png")).convert_alpha()
-    #     self.loaded["leaderboard"] = True
 
     def load_data_story(self):
         # Story
